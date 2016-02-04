@@ -3,7 +3,7 @@ App = React.createClass({
 
 	getMeteorData() {
 		return {
-			tasks: Tasks.find({}).fetch()
+			tasks: Tasks.find({}, {sort: {createdAt: -1}}).fetch()
 		}
 	},
 
@@ -13,11 +13,31 @@ App = React.createClass({
 		});
 	},
 
+	handleSubmit(event) {
+		event.preventDefault();
+		var text = React.findDOMNode(this.refs.textInput).value.trim();
+
+		Tasks.insert({
+			text: text,
+			createdAt: new Date()
+		});
+
+		React.findDOMNode(this.refs.textInput).value = "";
+	},
+
 	render() {
 		return (
 			<div className = "container">
 				<header>
 					<h1>Todo List</h1>
+
+				<form className = "new-task" onSubmit ={this.handleSubmit} >
+					<input type = "text"
+						ref = "textInput"
+						placeholder = "type here to add new tasks"
+					></input>
+				</form>
+
 				</header>
 
 				<ul>
