@@ -28,14 +28,14 @@ App = React.createClass({
 
 	handleSubmit(event) {
 		event.preventDefault();
-		var text = React.findDOMNode(this.refs.textInput).value.trim();
+		var text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
 
 		Tasks.insert({
 			text: text,
 			createdAt: new Date()
 		});
 
-		React.findDOMNode(this.refs.textInput).value = "";
+		ReactDOM.findDOMNode(this.refs.textInput).value = "";
 	},
 
 	toggleHideCompleted() {
@@ -58,6 +58,8 @@ App = React.createClass({
 						onClick={this.toggleHideCompleted} />
 					Hide Completed Tasks
 				</label>
+
+				<AccountsUIWrapper />
 
 				<form className = "new-task" onSubmit ={this.handleSubmit} >
 					<input type = "text"
