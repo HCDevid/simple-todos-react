@@ -16,7 +16,8 @@ App = React.createClass({
 
 		return {
 			tasks: Tasks.find(query, {sort: {createdAt: -1}}).fetch(),
-			incompleteCount: Tasks.find(query).count()
+			incompleteCount: Tasks.find(query).count(),
+			currentUser: Meteor.user()
 		};
 	},
 
@@ -32,7 +33,9 @@ App = React.createClass({
 
 		Tasks.insert({
 			text: text,
-			createdAt: new Date()
+			createdAt: new Date(),
+			owner: Meteor.userId(),
+			username: Meteor.user().username
 		});
 
 		ReactDOM.findDOMNode(this.refs.textInput).value = "";
@@ -61,12 +64,14 @@ App = React.createClass({
 
 				<AccountsUIWrapper />
 
-				<form className = "new-task" onSubmit ={this.handleSubmit} >
-					<input type = "text"
-						ref = "textInput"
-						placeholder = "type here to add new tasks"
-					></input>
-				</form>
+				{this.data.currentUser ? //ternary operator to display form if initial parameter is true
+					<form className = "new-task" onSubmit ={this.handleSubmit} >
+						<input type = "text"
+							ref = "textInput"
+							placeholder = "type here to add new tasks"
+						></input>
+					</form> : ''
+				}
 
 				</header>
 
