@@ -1,6 +1,7 @@
 Task = React.createClass({
 	propTypes: {
-		task: React.PropTypes.object.isRequired
+		task: React.PropTypes.object.isRequired,
+		showPrivateButton: React.PropTypes.bool.isRequired
 	},
 
 	toggleChecked() {
@@ -12,10 +13,15 @@ Task = React.createClass({
 		Meteor.call("removeTask", this.props.task._id);
 	},
 
+	togglePrivate() {
+		Meteor.call("setPrivate", this.props.task._id, ! this.props.task.private)
+	},
+
 	render() {
 	    // Give tasks a different className when they are checked off,
 	    // so that we can style them nicely in CSS
-	    const taskClassName = this.props.task.checked ? "checked" : "";
+	    const taskClassName = this.props.task.checked ? "checked" : "" + " " + 
+	    	this.props.task.private ? "private" : "";
 
 	    return (
 	    	<li className={taskClassName}>
@@ -28,6 +34,12 @@ Task = React.createClass({
 	    	readOnly={true}
 	    	checked={this.props.task.checked}
 	    	onClick={this.toggleChecked} />
+
+	    	{this.props.showPrivateButton ? (
+	    		<button className = "toggle-private" onClick = {this.togglePrivate}>
+	    			{this.props.task.private ? "Private" : "Public"}
+	    		</button>
+    		) : ""}
 
 	    	<span className="text">
 		    	<strong>{this.props.task.username}</strong>: {this.props.task.text}
